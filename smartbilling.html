@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retail Billing System</title>
+    <link rel="stylesheet" href="smartbilling.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    
+    <style>
+        /* General Styles */
+        body {
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            background-color: #f4f4f4;
+            display: flex;
+        }
+
+        /* Navigation Bar Styles */
+        .navbar {
+            background: linear-gradient(135deg, #4a90e2, #50e3c2);
+            color: #fff;
+            padding: 15px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 200px; /* Width of the vertical navbar */
+            height: 100vh; /* Full height */
+            box-shadow: 4px 0 8px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .navbar .logo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .navbar .logo a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 26px;
+            font-weight: 700;
+            transition: color 0.3s ease;
+        }
+
+        .navbar .logo a:hover {
+            color: #d1e7fd;
+        }
+
+        .nav-links {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .nav-links li {
+            margin-bottom: 15px;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 18px;
+            padding: 10px 15px;
+            border-radius: 5px;
+            display: block;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            color: #d1e7fd;
+        }
+
+        /* Main Content Styles */
+        .container {
+            flex-grow: 1;
+            padding: 20px;
+            margin-left: 220px; /* Space for the vertical navbar */
+        }
+
+        /* Section Styles */
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .section h2 {
+            color: #333;
+        }
+
+        /* Add Customer Styles */
+        .add-customer {
+            margin-bottom: 20px;
+        }
+
+        .add-customer input[type="text"],
+        .add-customer input[type="number"],
+        .add-customer input[type="email"],
+        .add-customer textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+            color: #333;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .add-customer input[type="text"]:hover,
+        .add-customer input[type="number"]:hover,
+        .add-customer input[type="email"]:hover,
+        .add-customer textarea:hover {
+            background-color: #fff;
+            color: #000;
+        }
+
+        .add-customer button {
+            background: linear-gradient(135deg, #4a90e2, #50e3c2);
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+        }
+
+        .add-customer button:hover {
+            background: linear-gradient(135deg, #357abd, #46b9c4);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+            transform: scale(1.05);
+        }
+
+        /* Button to scroll back to top */
+        .back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #4a90e2;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            z-index: 1000;
+        }
+
+        .back-to-top:hover {
+            background-color: #357abd;
+            transform: scale(1.1);
+        }
+
+        /* Chart Styles */
+        .chart-container {
+            margin: 20px 0;
+            max-width: 400px; /* Adjust as needed */
+            margin: auto;
+        }
+
+        .chart-container canvas {
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* Bill Generation Styles */
+        .bill-generation {
+            margin-top: 20px;
+        }
+
+        .bill-generation button {
+            background: linear-gradient(135deg, #4a90e2, #50e3c2);
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+        }
+
+        .bill-generation button:hover {
+            background: linear-gradient(135deg, #357abd, #46b9c4);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="logo">
+            <a href="#">Bill Up!! </a>
+        </div>
+        <ul class="nav-links">
+            <li><a href="#personal-info" id="dashboard-nav">Dashboard</a></li>
+            <li><a href="#items" id="products-nav">Products</a></li>
+            <li><a href="#bill-area" id="invoice-nav">Invoice</a></li>
+            <li><a href="#expense-history" id="expense-history-nav">Expense History</a></li>
+            <li><a href="#add-customer" id="add-customer-nav">Add Customer</a></li>
+            
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Sections -->
+        <div id="personal-info" class="section active">
+            <h2>Personal Info</h2>
+            <div class="customer-details">
+                <label for="name">Name:</label>
+                <input type="text" id="name">
+                <label for="phone">Phone Number:</label>
+                <input type="text" id="phone">
+                <label for="bill">Bill Number:</label>
+                <input type="text" id="bill">
+                <label for="e-mail">E-mail:</label>
+                <input type="text" id="e-mail">
+                <button id="search">Search</button>
+            </div>
+        </div>
+
+        <div id="items" class="section">
+            <h2>Items</h2>
+            <div class="category cosmetics">
+                <h3>Cosmetics</h3>
+                <label>Bath Soap: <input type="number" id="bathSoap" value="0" data-price="30"></label>
+                <label>Face Cream: <input type="number" id="faceCream" value="0" data-price="70"></label>
+                <label>Face Wash: <input type="number" id="faceWash" value="0" data-price="60"></label>
+                <label>Hair Spray: <input type="number" id="hairSpray" value="0" data-price="50"></label>
+                <label>Hair Gel: <input type="number" id="hairGel" value="0" data-price="40"></label>
+                <label>Body Lotion: <input type="number" id="bodyLotion" value="0" data-price="80"></label>
+            </div>
+            <div class="category grocery">
+                <h3>Grocery</h3>
+                <label>Rice: <input type="number" id="rice" value="0" data-price="100"></label>
+                <label>Oil: <input type="number" id="oil" value="0" data-price="90"></label>
+                <label>Daal: <input type="number" id="daal" value="0" data-price="50"></label>
+                <label>Wheat: <input type="number" id="wheat" value="0" data-price="60"></label>
+                <label>Sugar: <input type="number" id="sugar" value="0" data-price="40"></label>
+                <label>Tea: <input type="number" id="tea" value="0" data-price="30"></label>
+            </div>
+            <div class="category drinks">
+                <h3>Cold Drinks</h3>
+                <label>Maaza: <input type="number" id="maaza" value="0" data-price="20"></label>
+                <label>Pepsi: <input type="number" id="pepsi" value="0" data-price="25"></label>
+                <label>Sprite: <input type="number" id="sprite" value="0" data-price="25"></label>
+                <label>Dew: <input type="number" id="dew" value="0" data-price="30"></label>
+                <label>Frooti: <input type="number" id="frooti" value="0" data-price="20"></label>
+                <label>Coca Cola: <input type="number" id="cocaCola" value="0" data-price="25"></label>
+            </div>
+        </div>
+
+        <div id="bill-area" class="section">
+            <h2>Bill Area</h2>
+            <textarea id="billArea" readonly></textarea>
+            <div class="actions">
+                <button id="total">Total</button>
+                <button id="bill">Generate Bill</button>
+                <button id="email">Email</button>
+                <button id="print">Print</button>
+                <button id="clear">Clear</button>
+            </div>
+            <div class="totals">
+                <label>Cosmetic Price: <input type="text" id="cosmeticPrice" readonly></label>
+                <label>Grocery Price: <input type="text" id="groceryPrice" readonly></label>
+                <label>Cold Drink Price: <input type="text" id="coldDrinkPrice" readonly></label>
+                <label>Cosmetic Tax: <input type="text" id="cosmeticTax" readonly></label>
+                <label>Grocery Tax: <input type="text" id="groceryTax" readonly></label>
+                <label>Cold Drink Tax: <input type="text" id="coldDrinkTax" readonly></label>
+            </div>
+            <div class="bill-generation">
+                <h3>Generate Bill</h3>
+                <textarea id="billContent" readonly></textarea>
+                <button id="generateBill">Generate Bill</button>
+            </div>
+            <div class="additional-options">
+                <h2>Available Offers</h2>
+                <ul id="offersList"></ul>
+            </div>
+        </div>
+
+        <div id="expense-history" class="section">
+            <h2>Expense History</h2>
+            <div class="chart-container">
+                <canvas id="expensePieChart" width="200" height="200"></canvas>
+            </div>
+            <div class="chart-container">
+                <canvas id="expenseBarChart" width="300" height="150"></canvas>
+            </div>
+            <textarea id="history" readonly></textarea>
+        </div>
+
+        <div id="add-customer" class="section">
+            <h2>Add Customer</h2>
+            <div class="add-customer">
+                <label for="customer-name">Name:</label>
+                <input type="text" id="customer-name" name="customer-name">
+                <label for="customer-phone">Phone Number:</label>
+                <input type="number" id="customer-phone" name="customer-phone">
+                <label for="customer-email">Email:</label>
+                <input type="email" id="customer-email" name="customer-email">
+                <label for="customer-address">Address:</label>
+                <textarea id="customer-address" name="customer-address" rows="4"></textarea>
+                <button id="add-customer-btn">Add Customer</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Back to Top Button -->
+    <button class="back-to-top" onclick="scrollToTop()">↑</button>
+
+    <script src="./smartbilling.js"></script>
+    <script>
+        // JavaScript for handling navigation and back to top button
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetId = link.getAttribute('href');
+                
+                // Hide all sections
+                document.querySelectorAll('.section').forEach(section => section.classList.remove('active'));
+                
+                // Show the target section
+                document.querySelector(targetId).classList.add('active');
+
+                // Set active class for navigation link
+                document.querySelectorAll('.nav-links a').forEach(navLink => navLink.classList.remove('active'));
+                link.classList.add('active');
+            });
+        });
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // JavaScript for generating charts
+        const ctxPie = document.getElementById('expensePieChart').getContext('2d');
+        const ctxBar = document.getElementById('expenseBarChart').getContext('2d');
+
+        const expensePieChart = new Chart(ctxPie, {
+            type: 'pie',
+            data: {
+                labels: ['Cosmetics', 'Grocery', 'Cold Drinks'],
+                datasets: [{
+                    label: 'Expense Distribution',
+                    data: [300, 400, 200], // Example data
+                    backgroundColor: ['#ff6384', '#36a2eb', '#cc65fe'],
+                    borderColor: '#fff',
+                    borderWidth: 1
+                }]
+            }
+        });
+
+        const expenseBarChart = new Chart(ctxBar, {
+            type: 'bar',
+            data: {
+                labels: ['January', 'February', 'March', 'April', 'May'],
+                datasets: [{
+                    label: 'Monthly Expenses',
+                    data: [1200, 1900, 3000, 5000, 4000], // Example data
+                    backgroundColor: '#36a2eb',
+                    borderColor: '#fff',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // JavaScript for generating bill content
+        document.getElementById('generateBill').addEventListener('click', () => {
+            const billContent = `
+                <h3>Invoice</h3>
+                <p>Cosmetic Price: ${document.getElementById('cosmeticPrice').value}</p>
+                <p>Grocery Price: ${document.getElementById('groceryPrice').value}</p>
+                <p>Cold Drink Price: ${document.getElementById('coldDrinkPrice').value}</p>
+                <p>Cosmetic Tax: ${document.getElementById('cosmeticTax').value}</p>
+                <p>Grocery Tax: ${document.getElementById('groceryTax').value}</p>
+                <p>Cold Drink Tax: ${document.getElementById('coldDrinkTax').value}</p>
+                <p><strong>Total Amount: ${calculateTotal()}</strong></p>
+            `;
+            document.getElementById('billContent').value = billContent;
+        });
+
+        function calculateTotal() {
+            const cosmeticPrice = parseFloat(document.getElementById('cosmeticPrice').value) || 0;
+            const groceryPrice = parseFloat(document.getElementById('groceryPrice').value) || 0;
+            const coldDrinkPrice = parseFloat(document.getElementById('coldDrinkPrice').value) || 0;
+            return cosmeticPrice + groceryPrice + coldDrinkPrice;
+        }
+    </script>
+</body>
+</html>

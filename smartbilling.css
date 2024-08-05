@@ -1,0 +1,278 @@
+/* General Styles */
+body {
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+    background-color: #f0f2f5;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Navigation Bar Styles */
+.navbar {
+    background: linear-gradient(135deg, #4a90e2, #50e3c2);
+    color: #fff;
+    padding: 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 250px;
+    height: 100vh;
+    box-shadow: 4px 0 8px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+/* Navbar Logo */
+.navbar .logo {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.navbar .logo a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 28px;
+    font-weight: 700;
+    transition: color 0.3s ease;
+}
+
+.navbar .logo a:hover {
+    color: #d1e7fd;
+}
+
+/* Navigation Links */
+.nav-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    flex: 1;
+}
+
+.nav-links li {
+    margin-bottom: 20px;
+}
+
+.nav-links a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 18px;
+    padding: 15px;
+    border-radius: 8px;
+    display: block;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.nav-links a:hover, .nav-links a.active {
+    background-color: rgba(255, 255, 255, 0.3);
+    color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Main Content Styles */
+.container {
+    flex-grow: 1;
+    padding: 20px;
+    margin-left: 270px;
+    margin-top: 80px;
+    transition: margin-left 0.3s ease;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+/* Section Styles */
+.section {
+    display: none;
+    padding: 20px;
+}
+
+.section.active {
+    display: block;
+}
+
+.section h2 {
+    color: #333;
+    border-bottom: 2px solid #4a90e2;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+/* Button to scroll back to top */
+.back-to-top {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #4a90e2;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    z-index: 1000;
+}
+
+.back-to-top:hover {
+    background-color: #357abd;
+    transform: scale(1.1);
+}
+
+/* Animation for section visibility */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Additional Styles for Buttons */
+button {
+    background: #4a90e2;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+button:hover {
+    background: #357abd;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Form Elements */
+input[type="text"],
+input[type="number"],
+input[type="email"],
+textarea {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    width: calc(100% - 22px);
+    margin-bottom: 10px;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus,
+input[type="email"]:focus,
+textarea:focus {
+    border-color: #4a90e2;
+    outline: none;
+    box-shadow: 0 0 5px rgba(74, 144, 226, 0.5);
+}
+
+/* Add Customer Section */
+.add-customer {
+    margin-top: 20px;
+}
+
+.add-customer h2 {
+    color: #333;
+    border-bottom: 2px solid #4a90e2;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.add-customer form {
+    display: flex;
+    flex-direction: column;
+}
+
+.add-customer form label {
+    color: #4a90e2;
+    font-weight: bold;
+}
+
+/* Actions for Bill Area */
+.actions button {
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+.actions button:last-child {
+    margin-right: 0;
+}
+
+/* Totals for Bill Area */
+.totals label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.totals input {
+    width: 100px;
+    margin-left: 10px;
+}
+
+/* Additional Options for Bill Area */
+.additional-options ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.additional-options li {
+    margin-bottom: 10px;
+}
+
+/* Enhance design with colors */
+.section h2 {
+    color: #333;
+    background-color: #f0f2f5;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="email"],
+textarea {
+    background-color: #f9f9f9;
+    color: #333;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+input[type="text"]:hover,
+input[type="number"]:hover,
+input[type="email"]:hover,
+textarea:hover {
+    background-color: #fff;
+    color: #000;
+}
+
+/* Enhance Add Customer section */
+.add-customer form input[type="text"],
+.add-customer form input[type="number"],
+.add-customer form input[type="email"] {
+    border: 1px solid #50e3c2;
+}
+
+/* Enhance Buttons */
+button {
+    background: linear-gradient(135deg, #4a90e2, #50e3c2);
+    color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+button:hover {
+    background: linear-gradient(135deg, #357abd, #46b9c4);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    transform: scale(1.05);
+}
